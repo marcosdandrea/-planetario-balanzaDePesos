@@ -12,6 +12,7 @@ export const createMainWindow = async () => {
         fullscreen: false,
         frame: true,
         resizable: true,
+        showMenuBar: false,
         size: { width: 1200, height: 800 },
         url: "/"
     } as createWindowOptions

@@ -10,11 +10,11 @@
     "baseUrl": ".",
     "paths": {
       "@common/*": ["src/common/*"],
-      "@components/*": ["src/ui/components/*"],
-      "@hooks/*": ["src/ui/hooks/*"],
-      "@views/*": ["src/ui/views/*"],
-      "@contexts/*": ["src/ui/contexts/*"],
-      "@utils/*": ["src/ui/utils/*"]
+      "@components/*": ["src/ui/src/components/*"],
+      "@hooks/*": ["src/ui/src/hooks/*"],
+      "@views/*": ["src/ui/src/views/*"],
+      "@contexts/*": ["src/ui/src/contexts/*"],
+      "@utils/*": ["src/ui/src/utils/*"]
     },
   },
   "include": ["src/ui", "src/common"],

@@ -32,6 +32,7 @@
     "test:unit": "vitest src"
   },
   "dependencies": {
+    "antd": "^5.27.6",
     "axios": "^1.12.2",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",

@@ -1,0 +1,57 @@
+.header{
+    position: absolute;
+    top: 50px;
+    left: 40px;
+    width: 278px;
+    height: 307px;
+    z-index: 10;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: space-between;
+    row-gap: 1rem;
+}
+
+.logos{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.title{
+    height: 75px;
+    font-size: 1.7rem;
+    line-height: 2.3rem;
+    font-family: "Lato Black", sans-serif;
+    text-transform: uppercase;
+}
+
+.subtitle{
+    height: 75px;
+    font-size: 2rem;
+    line-height: 2rem;
+    font-family: "Lato Black", sans-serif;
+    opacity: 0.8;
+    color: #03a8fa
+}
+
+.logoPlanetario {
+    width: 150px;
+    height: 103px;
+    aspect-ratio: 1;
+    background-image: url('/resources/LogoPlanetario.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.logoLab {
+    width: 94px;
+    height: 103px;
+    aspect-ratio: 1;
+    background-image: url('/resources/LogoLab.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}

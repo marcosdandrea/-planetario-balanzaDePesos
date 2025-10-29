@@ -1,0 +1,81 @@
+.planetButton{
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+}
+
+.planetTouchArea{
+    pointer-events: all;
+    position: absolute;
+    aspect-ratio: 1;
+    height: 100%;
+    z-index: 10;
+    clip-path: circle(50%);
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.planetButtonImage{
+    transition: all 0.6s ease;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2; /* Siempre por encima del highlight */
+}
+
+.planetHighlight{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    pointer-events: none;
+    /* El backgroundColor se define desde el componente */
+}
+
+.planetHighlight::before,
+.planetHighlight::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    content: '';
+    animation: rippleWaves 1.2s infinite linear;
+}
+
+.planetHighlight::after {
+    animation-delay: .25s;
+}
+
+.planetHighlight::after {
+    animation-delay: .25s;
+}
+
+@keyframes rippleWaves {
+    0% {
+        border: var(--ripple-border-width, 8px) solid currentColor;
+        transform: translate(-50%, -50%) scale(0.9);
+        opacity: 1;
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.25);
+        opacity: 0.25;
+    }
+    100% {
+        filter: blur(8px);
+        border: calc(var(--ripple-border-width, 8px) / 8) solid currentColor;
+        transform: translate(-50%, -50%) scale(1.5);
+        opacity: 0;
+    }
+}

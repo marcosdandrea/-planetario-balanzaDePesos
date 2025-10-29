@@ -13,6 +13,7 @@ export interface createWindowOptions {
     fullscreen?: boolean;
     frame?: boolean;
     resizable?: boolean;
+    showMenuBar?: boolean;
     url: string;
 }
 
@@ -75,6 +76,10 @@ export class WindowManager {
                 });
                 this.windows.set(id, window);
 
+                if (options.showMenuBar !== undefined) {
+                    window.setMenuBarVisibility(options.showMenuBar);
+                }
+
                 if (!options.url.startsWith('/')) {
                     log.error(`Invalid URL for window ${name && id}: ${options.url}`);
                     reject(new Error(`Invalid URL: ${options.url}`));
@@ -106,6 +111,10 @@ export class WindowManager {
                         } else {
                             window.center();
                         }
+                    }
+
+                    if (IS_DEV) {
+                        window.webContents.openDevTools();
                     }
                 });
 

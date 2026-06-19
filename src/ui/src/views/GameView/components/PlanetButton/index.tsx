@@ -1,6 +1,6 @@
-import React, { useContext, useEffect, useState, useCallback } from 'react';
+import React, { useContext, useEffect, useState, useCallback, memo } from 'react';
 import style from "./style.module.css";
-import { scaleContext } from '@contexts/scale';
+import { planetContext } from '@contexts/planet';
 import { GameContext } from '@contexts/game';
 
 interface PlanetButtonProps {
@@ -14,11 +14,14 @@ interface PlanetButtonProps {
     imageSize?: string;
     rotation?: number;
     growthScale?: number;
+    showCollider?: boolean;
+    colliderSize?: number;
+    playbackRate?: number;
 }
 
-const PlanetButton = ({ videoSrc, imageSrc, zIndex, position = [0, 0], size, id, rippleColor, imageSize, rotation, growthScale=1.02 }: PlanetButtonProps) => {
+const PlanetButton = memo(({ videoSrc, imageSrc, zIndex, position = [0, 0], size, id, rippleColor, imageSize, rotation, growthScale=1.02, showCollider, colliderSize, playbackRate = 1 }: PlanetButtonProps) => {
 
-    const { planetSelectedId, setPlanetSelectedId } = useContext(scaleContext)!;
+    const { planetSelectedId, setPlanetSelectedId } = useContext(planetContext)!;
     const {addSprite} = useContext(GameContext)!;
     const [isSelected, setIsSelected] = useState(false);
     const planetSize = size ?? 500;
@@ -55,8 +58,8 @@ const PlanetButton = ({ videoSrc, imageSrc, zIndex, position = [0, 0], size, id,
     }, [addSprite, id, videoSrc]);
 
     // Manejadores de error
-    const handleMediaError = useCallback(() => {
-        console.error(`Error loading media for planet: ${id}`);
+    const handleMediaError = useCallback((err) => {
+        console.error(`Error loading media for planet: ${id}`, err.message);
         addSprite({
             id,
             src: videoSrc || imageSrc,
@@ -81,13 +84,18 @@ const PlanetButton = ({ videoSrc, imageSrc, zIndex, position = [0, 0], size, id,
                 width: `${planetSize}px`,
                 height: `${planetSize}px`,
             }}>
-            <div className={style.planetTouchArea}
+            <div
+                style={{
+                    width: `${colliderSize ?? planetSize}px`,
+                    height: `${colliderSize ?? planetSize}px`,
+                    backgroundColor: showCollider ? "#ff000085" : "transparent"
+                }} 
+                className={style.planetTouchArea}
                 onTouchEnd={handleOnClick}
                 onClick={handleOnClick} />
             <div
                 style={{
-                    transform: `${rotation ? `rotate(${rotation}deg)` : ''} ${isSelected ? `scale(${growthScale})` : ''}`.trim(),
-                    filter: isSelected ? 'saturate(1.5)' : 'saturate(.5)',
+                    transform: `${rotation ? `rotate(${rotation}deg)` : ''} ${isSelected ? `scale(${growthScale})` : ''}`.trim()
                 }}
                 className={style.planetButtonImage}>
                 {
@@ -102,6 +110,16 @@ const PlanetButton = ({ videoSrc, imageSrc, zIndex, position = [0, 0], size, id,
                             style={{ pointerEvents: 'none' }}
                             onCanPlayThrough={handleVideoLoad}
                             onError={handleMediaError}
+                            onLoadedData={(e) => {
+                                console.log(`Setting playback rate for ${id}:`, e.currentTarget.playbackRate);
+                                e.currentTarget.playbackRate = playbackRate;
+                                console.log(`New playback rate for ${id}:`, e.currentTarget.playbackRate);
+                            }}
+                            onPlay={(e) => {
+                                // Asegurar que el playback rate se mantenga cuando el video comienza a reproducirse
+                                e.currentTarget.playbackRate = playbackRate;
+                                console.log(`Video ${id} started playing at rate:`, e.currentTarget.playbackRate);
+                            }}
                         />
                         :
                         <img
@@ -126,6 +144,8 @@ const PlanetButton = ({ videoSrc, imageSrc, zIndex, position = [0, 0], size, id,
             }
         </div>
     );
-}
+});
+
+PlanetButton.displayName = 'PlanetButton';
 
 export default PlanetButton;

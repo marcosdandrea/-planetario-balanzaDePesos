@@ -1,22 +1,26 @@
-import React from 'react';
+import React, { memo } from 'react';
 import style from './style.module.css';
 import PlanetButton from '../PlanetButton';
 
-const PlanetContainer = () => {
+// Componente completamente aislado - no consume ningún contexto que cambie con la balanza
+const PlanetContainer = memo(() => {
     return (
         <div className={style.planetContainer}>
             <PlanetButton
-                id="sun"
+                id="sol"
                 zIndex={10}
-                position={[-2560, -100]}
+                position={[-2360, -100]}
                 size={3000}
                 rippleColor={"#db771a"}
-                imageSrc="resources/sun.png"
+                videoSrc="resources/sun.webm"
+                colliderSize={2450}
+                showCollider={false}
+                playbackRate={15}
             /> 
             <PlanetButton
                 zIndex={9}
                 growthScale={1.1}
-                id="mercury"
+                id="mercurio"
                 position={[423, 1822]}
                 size={80}
                 rippleColor={"#f09f5dff"}
@@ -34,7 +38,7 @@ const PlanetContainer = () => {
             <PlanetButton
                 zIndex={8}
                 growthScale={1.1}
-                id="moon"
+                id="luna"
                 position={[860, 1725]}
                 size={70}
                 rippleColor={"#ffffffff"}
@@ -43,7 +47,7 @@ const PlanetContainer = () => {
             <PlanetButton
                 zIndex={7}
                 growthScale={1.2}
-                id="earth"
+                id="tierra"
                 position={[700, 1600]}
                 size={190}
                 rippleColor={"#00a2ff"}
@@ -52,7 +56,7 @@ const PlanetContainer = () => {
             <PlanetButton
                 zIndex={6}
                 growthScale={1.1}
-                id="mars"
+                id="marte"
                 position={[820, 1440]}
                 size={128}
                 rotation={-50}
@@ -69,7 +73,7 @@ const PlanetContainer = () => {
             />
             <PlanetButton
                 zIndex={4}
-                id="saturn"
+                id="saturno"
                 position={[780, 820]}               
                 size={570}
                 imageSize={"200%"}
@@ -78,7 +82,7 @@ const PlanetContainer = () => {
             /> 
             <PlanetButton
                 zIndex={3}
-                id="uranus"
+                id="urano"
                 position={[680, 680]}               
                 size={225}
                 rippleColor={"#20e4c3ff"}
@@ -86,13 +90,15 @@ const PlanetContainer = () => {
             /> 
             <PlanetButton
                 zIndex={2}
-                id="neptune"
+                id="neptuno"
                 position={[890, 580]}               
                 size={210}
                 rippleColor={"#0f57b4ff"}
                 imageSrc="resources/neptune.png"
             /> 
         </div>);
-}
+});
+
+PlanetContainer.displayName = 'PlanetContainer';
 
 export default PlanetContainer;

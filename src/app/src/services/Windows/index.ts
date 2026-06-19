@@ -13,7 +13,7 @@ export const createMainWindow = async () => {
         frame: true,
         resizable: true,
         showMenuBar: false,
-        size: { width: 1200, height: 800 },
+        size: { width: 720, height: 1280 }, // 9:16 aspect ratio
         url: "/"
     } as createWindowOptions
 

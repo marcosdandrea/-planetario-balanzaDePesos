@@ -33,6 +33,7 @@ build({
         'path',
         'os',
         'url',
+        'serialport',
         'dotenv/config'
     ],
     define: {

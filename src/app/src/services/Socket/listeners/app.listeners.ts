@@ -1,4 +1,5 @@
 import { Socket } from "socket.io";
+import { scaleListeners } from "./scale.listener";
 
 export const appListeners = (socket: Socket | Error) => {
     if (socket instanceof Error) {
@@ -6,11 +7,8 @@ export const appListeners = (socket: Socket | Error) => {
         return;
     }
     
-    /*
-    socket.on('some-event', someService);
-    socket.on('another-event', anotherService);
-    */
-
+    // Registrar listeners de la balanza
+    scaleListeners(socket);
 
     socket.on('ping', () => {
         console.log ('Received ping from client');

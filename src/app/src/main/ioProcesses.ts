@@ -23,6 +23,10 @@ const ioProcesses = async () => {
         const io = await initSocket({ httpServer });
         log.info('Socket initialized.');
 
+        const { init: initScaleSerial } = await import('@services/ScaleSerial/index.js');
+        await initScaleSerial({ io });
+        log.info('Scale serial service initialized.');
+
         log.info('I/O processes started successfully.');
     } catch (error) {
         log.error('Error starting I/O processes:', error);

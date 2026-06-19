@@ -27,6 +27,7 @@ build({
         'os',
         'url',
         'crypto',
+        'serialport',
         'dotenv/config'
     ]
 }).catch(() => process.exit(1));

@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Manual tecnico - Ajuste de .env</title>
+  <style>
+    :root {
+      --bg: #f3efe7;
+      --paper: #fffdf8;
+      --ink: #1f2430;
+      --muted: #5e6472;
+      --accent: #0f6b68;
+      --accent-2: #9a5b2b;
+      --line: #d9d2c2;
+      --soft: #ece5d4;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: linear-gradient(180deg, #ece4d4 0%, var(--bg) 35%, #f7f3eb 100%);
+      color: var(--ink);
+      font-family: Georgia, "Times New Roman", serif;
+      line-height: 1.45;
+    }
+    .page {
+      max-width: 980px;
+      margin: 32px auto;
+      padding: 32px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      box-shadow: 0 18px 45px rgba(37, 30, 18, 0.10);
+    }
+    .header {
+      border-bottom: 3px solid var(--accent);
+      padding-bottom: 16px;
+      margin-bottom: 24px;
+    }
+    .eyebrow {
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--accent-2);
+      font: 700 12px/1.2 Arial, sans-serif;
+      margin: 0 0 10px;
+    }
+    h1 {
+      margin: 0 0 8px;
+      font: 700 34px/1.1 Georgia, serif;
+      color: #143c3a;
+    }
+    .subtitle {
+      margin: 0;
+      color: var(--muted);
+      font: 400 15px/1.5 Arial, sans-serif;
+    }
+    h2 {
+      margin: 28px 0 12px;
+      font: 700 20px/1.2 Georgia, serif;
+      color: #143c3a;
+    }
+    p, li {
+      font: 400 14px/1.6 Arial, sans-serif;
+    }
+    ul, ol {
+      margin: 0 0 16px 22px;
+      padding: 0;
+    }
+    .note {
+      background: #f8f4e8;
+      border-left: 4px solid var(--accent);
+      padding: 14px 16px;
+      margin: 16px 0;
+    }
+    .warning {
+      background: #fff2e8;
+      border-left: 4px solid var(--accent-2);
+      padding: 14px 16px;
+      margin: 16px 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0 18px;
+      font: 400 13px/1.45 Arial, sans-serif;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 10px 12px;
+      vertical-align: top;
+    }
+    th {
+      background: var(--soft);
+      text-align: left;
+      font-weight: 700;
+    }
+    code {
+      font-family: Consolas, "Courier New", monospace;
+      background: #f4f0e5;
+      padding: 2px 5px;
+      border-radius: 4px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+    .card {
+      border: 1px solid var(--line);
+      background: #fff;
+      padding: 14px 16px;
+    }
+    .footer {
+      margin-top: 28px;
+      padding-top: 10px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font: 400 12px/1.4 Arial, sans-serif;
+    }
+    @media print {
+      body { background: #fff; }
+      .page { margin: 0; box-shadow: none; border: none; max-width: none; }
+      .page-break { break-before: page; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="header">
+      <p class="eyebrow">Planetario - Balanza de pesos</p>
+      <h1>Manual tecnico para ajustar el archivo .env</h1>
+      <p class="subtitle">Guia breve para personal tecnico del museo. Este documento explica que variables se pueden cambiar y que hace cada una.</p>
+    </section>
+
+    <section>
+      <h2>1. Que es el archivo .env</h2>
+      <p>El archivo <code>.env</code> contiene parametros de configuracion de la aplicacion. El tecnico puede modificarlo cuando sea necesario para ajustar el comportamiento de la balanza, la conexion serial o algunos tiempos de espera.</p>
+      <div class="note">
+        <strong>Importante:</strong> despues de cambiar el <code>.env</code>, se debe reiniciar la aplicacion para que los cambios se apliquen.
+      </div>
+      <div class="warning">
+        <strong>No cambiar por prueba y error:</strong> si no se conoce el efecto de una variable, modificar un solo valor por vez y anotar el cambio realizado.
+      </div>
+    </section>
+
+    <section>
+      <h2>2. Variables principales</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Variable</th>
+            <th>Para que sirve</th>
+            <th>Valor actual recomendado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>SCALE_SERIAL_ENABLED</code></td>
+            <td>Activa o desactiva la lectura de la balanza.</td>
+            <td><code>true</code></td>
+          </tr>
+          <tr>
+            <td><code>SCALE_SERIAL_PORT</code></td>
+            <td>Puerto serial de la balanza. Normalmente se deja en <code>auto</code>.</td>
+            <td><code>auto</code></td>
+          </tr>
+          <tr>
+            <td><code>SCALE_SERIAL_BAUD_RATE</code></td>
+            <td>Velocidad de comunicacion serial.</td>
+            <td><code>9600</code></td>
+          </tr>
+          <tr>
+            <td><code>SCALE_SERIAL_DATA_BITS</code></td>
+            <td>Bits de datos de la comunicacion.</td>
+            <td><code>8</code></td>
+          </tr>
+          <tr>
+            <td><code>SCALE_SERIAL_STOP_BITS</code></td>
+            <td>Bits de parada.</td>
+            <td><code>1</code></td>
+          </tr>
+          <tr>
+            <td><code>SCALE_SERIAL_PARITY</code></td>
+            <td>Paridad de la comunicacion.</td>
+            <td><code>none</code></td>
+          </tr>
+          <tr>
+            <td><code>SCALE_SERIAL_POLL_INTERVAL_MS</code></td>
+            <td>Tiempo entre consultas a la balanza en milisegundos.</td>
+            <td><code>40</code></td>
+          </tr>
+          <tr>
+            <td><code>SCALE_SERIAL_REQUEST_COMMAND</code></td>
+            <td>Comando que envia la aplicacion a la balanza para pedir lectura.</td>
+            <td><code>\x05</code></td>
+          </tr>
+          <tr>
+            <td><code>SCALE_SERIAL_MIN_DELTA</code></td>
+            <td>Cambio minimo de peso para considerar que hay una lectura nueva.</td>
+            <td><code>0.5</code> kg</td>
+          </tr>
+          <tr>
+            <td><code>SCALE_SERIAL_WACK_WAIT_MS</code></td>
+            <td>Tiempo maximo de WACK continuo para mostrar <em>Espere...</em> cuando ya hay peso activo.</td>
+            <td><code>5000</code> ms</td>
+          </tr>
+          <tr>
+            <td><code>SCALE_SERIAL_IDLE_WACK_WAIT_MS</code></td>
+            <td>Tiempo maximo de WACK continuo para mostrar <em>Espere...</em> cuando la balanza esta en 0 kg.</td>
+            <td><code>1000</code> ms</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="grid">
+      <div class="card">
+        <h2>3. Que hacer si la balanza responde lento</h2>
+        <ol>
+          <li>Revisar primero el cableado y el puerto USB/serial.</li>
+          <li>Confirmar que <code>SCALE_SERIAL_PORT</code> siga en <code>auto</code> o en el puerto correcto.</li>
+          <li>Si la lectura salta demasiado, no bajar de golpe <code>SCALE_SERIAL_MIN_DELTA</code>; probar ajustes pequenos.</li>
+          <li>Si la interfaz muestra <em>Espere...</em> muy seguido, revisar los valores de WACK.</li>
+        </ol>
+      </div>
+      <div class="card">
+        <h2>4. Reglas de espera</h2>
+        <ul>
+          <li>Con la balanza en <code>0 kg</code>, la app espera <code>1 segundo</code> de WACK continuo antes de mostrar <em>Espere...</em>.</li>
+          <li>Con peso mayor a <code>0.5 kg</code>, la app espera <code>5 segundos</code> de WACK continuo antes de mostrar <em>Espere...</em>.</li>
+          <li>Mientras dura esa espera, la ultima lectura valida se mantiene en pantalla.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="page-break">
+      <h2>5. Procedimiento seguro para cambiar el .env</h2>
+      <ol>
+        <li>Cerrar la aplicacion si esta abierta.</li>
+        <li>Abrir el archivo <code>.env</code> desde la raiz del proyecto.</li>
+        <li>Modificar solo la variable necesaria.</li>
+        <li>Guardar el archivo.</li>
+        <li>Reiniciar la aplicacion completa.</li>
+        <li>Probar la balanza y observar el resultado durante unos segundos.</li>
+      </ol>
+
+      <h2>6. Valores de referencia rapidos</h2>
+      <ul>
+        <li><strong>Lectura demasiado inestable:</strong> subir <code>SCALE_SERIAL_MIN_DELTA</code>.</li>
+        <li><strong>La app tarda en reaccionar:</strong> revisar <code>SCALE_SERIAL_POLL_INTERVAL_MS</code> y la conexion fisica.</li>
+        <li><strong>Muestra <em>Espere...</em> muy pronto en 0 kg:</strong> subir <code>SCALE_SERIAL_IDLE_WACK_WAIT_MS</code>.</li>
+        <li><strong>Muestra <em>Espere...</em> demasiado tarde con peso:</strong> bajar <code>SCALE_SERIAL_WACK_WAIT_MS</code> con cuidado.</li>
+      </ul>
+
+      <div class="warning">
+        <strong>Recomendacion:</strong> si un cambio mejora algo pero rompe otra parte, volver al valor anterior antes de probar otro ajuste.
+      </div>
+    </section>
+
+    <section>
+      <h2>7. Soporte</h2>
+      <p>Si la balanza deja de responder, anotar el valor cambiado, la hora y el comportamiento observado antes de tocar otra variable. Eso facilita el diagnostico tecnico.</p>
+    </section>
+
+    <div class="footer">
+      Documento de apoyo tecnico. Version generada para el equipo del museo.
+    </div>
+  </main>
+</body>
+</html>

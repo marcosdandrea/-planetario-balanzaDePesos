@@ -1,6 +1,7 @@
 
-import type { Express } from 'express';
-import type { Server } from 'http';
+import express, { type Express } from 'express';
+import { createServer, type Server } from 'http';
+import path from 'path';
 import cors from 'cors';
 import { Log } from '@utils/log.js';
 import { env } from '@utils/envLoader.js';
@@ -22,10 +23,6 @@ const init = async ({ serverPort, staticDir }: ServerParams) => {
 
             const useContextIsolation = env.USE_CONTEXT_ISOLATION;
             log.info(`Context Isolation is ${useContextIsolation ? 'enabled' : 'disabled'}`);
-
-            const express = (await import("express")).default;
-            const { createServer } = await import("http");
-            const path = (await import('path')).default;
 
             const app = express();
             const httpServer = createServer(app);

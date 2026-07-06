@@ -12,11 +12,10 @@ const PlanetContainer = memo(() => {
                 position={[-2360, -100]}
                 size={3000}
                 rippleColor={"#db771a"}
-                videoSrc="resources/sun.webm"
+                imageSrc="resources/sun.png"
                 colliderSize={2450}
                 showCollider={false}
-                playbackRate={15}
-            /> 
+            />
             <PlanetButton
                 zIndex={9}
                 growthScale={1.1}
@@ -78,7 +77,7 @@ const PlanetContainer = memo(() => {
                 size={570}
                 imageSize={"200%"}
                 rippleColor={"#ffcc99"}
-                imageSrc="resources/saturn.png"
+                imageSrc="resources/Saturn.png"
             /> 
             <PlanetButton
                 zIndex={3}

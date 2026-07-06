@@ -1,6 +1,6 @@
 import crypto from "crypto";
 import path from "path";
-import { BrowserWindow } from "electron";
+import { BrowserWindow, screen } from "electron";
 import { Log } from "@utils/log.js";
 import { env } from "@utils/envLoader.js";
 
@@ -14,6 +14,10 @@ export interface createWindowOptions {
     frame?: boolean;
     resizable?: boolean;
     showMenuBar?: boolean;
+    // Pantalla en la que se debe abrir la ventana (1 = primera pantalla).
+    // Si no se especifica o es inválido para la cantidad de pantallas
+    // disponibles, se usa la primera por defecto.
+    screen?: number;
     url: string;
 }
 
@@ -53,17 +57,37 @@ export class WindowManager {
         }
     }
 
+    private getTargetDisplay(screenNumber?: number) {
+        const displays = screen.getAllDisplays();
+
+        if (screenNumber !== undefined) {
+            const targetIndex = screenNumber - 1;
+            if (targetIndex >= 0 && targetIndex < displays.length) {
+                return displays[targetIndex];
+            }
+            log.warn(`Screen ${screenNumber} is not valid (${displays.length} available). Using the first screen.`);
+        }
+
+        return displays[0];
+    }
+
     createWindow(options: createWindowOptions): Promise<BrowserWindow> {
         return new Promise(async (resolve, reject) => {
             try {
                 const { name } = options
                 const id = crypto.randomUUID();
+                const width = options.size?.width || 800;
+                const height = options.size?.height || 600;
+                const targetDisplay = this.getTargetDisplay(options.screen);
+                const x = options.position?.x ?? Math.round(targetDisplay.bounds.x + (targetDisplay.bounds.width - width) / 2);
+                const y = options.position?.y ?? Math.round(targetDisplay.bounds.y + (targetDisplay.bounds.height - height) / 2);
+
                 const window = new BrowserWindow({
                     show: false,
-                    width: options.size?.width || 800,
-                    height: options.size?.height || 600,
-                    x: options.position?.x,
-                    y: options.position?.y,
+                    width,
+                    height,
+                    x,
+                    y,
                     frame: options.frame !== undefined ? options.frame : true,
                     resizable: options.resizable !== undefined ? options.resizable : true,
                     webPreferences: {
@@ -102,19 +126,16 @@ export class WindowManager {
                 });
 
                 window.once('ready-to-show', () => {
+                    // La posición (x, y) ya fue calculada al crear la ventana en
+                    // base a la pantalla objetivo, así que no hace falta
+                    // reposicionarla ni centrarla acá.
                     if (options.fullscreen) {
                         window.setFullScreen(true);
-                    } else {
-                        window.show();
-                        if (options.position) {
-                            window.setPosition(options.position.x, options.position.y);
-                        } else {
-                            window.center();
-                        }
                     }
+                    window.show();
 
                     if (IS_DEV) {
-                        window.webContents.openDevTools();
+                        //window.webContents.openDevTools();
                     }
                 });
 

@@ -5,9 +5,14 @@ import { z } from 'zod';
 
 // Determinar el path del .env basado en si existe NODE_ENV
 const isDev = process.env.NODE_ENV === 'development'
+// En Electron empaquetado, el .env vive en la carpeta resources (fuera del asar)
+// para que el usuario pueda editarlo. En dev y en el build headless se usa el
+// comportamiento previo.
 const envPath = isDev
   ? path.join(process.cwd(), '.env')
-  : path.join(__dirname, "..", '.env');
+  : process.resourcesPath
+    ? path.join(process.resourcesPath, '.env')
+    : path.join(__dirname, "..", '.env');
 
 console.log(`[envLoader] Environment path: ${envPath}`);
 

@@ -39,7 +39,7 @@ const Game = memo(() => {
             <ScaleArea />
             <PlanetArea />
             <StaticElements />
-            <ScaleTester />
+            {/* <ScaleTester /> */}
         </div>
     );
 });

@@ -8,12 +8,14 @@ const getAppPath = async () => {
   if (isHeadless) {
     return process.cwd();
   } else {
-    const { app } = await import('electron');
-    return app.getAppPath();    
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const { app } = require('electron');
+    return app.getAppPath();
   }
 }
 
 export async function getStaticDir() {
+  if (isDev) return undefined;
   const appPath = await getAppPath();
   return path.join(appPath, 'dist-ui');
 }

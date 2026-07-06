@@ -1,9 +1,20 @@
 {
   "appId": "com.marcosdandrea.balanzadepesos",
   "productName": "Balanza de Pesos",
-  "files": ["dist-electron", "dist-ui", ".env"],
+  "files": ["dist-electron", "dist-ui"],
+  "extraResources": [
+    {
+      "from": ".env",
+      "to": ".env"
+    }
+  ],
   "icon": "./resources/icon/icon.ico",
   "asar": true,
+  "npmRebuild": false,
+  "electronDist": "node_modules/electron/dist",
+  "electronDownload": {
+    "mirror": "https://github.com/electron/electron/releases/download/"
+  },
   "mac": {
     "icon": "./resources/icon/icon.icns",
     "target": "dmg"
@@ -24,6 +35,11 @@
         "target": "dir",
         "arch": ["x64"]
       }
-    ]
+    ],
+    "artifactName": "${productName}-${version}-${arch}.${ext}"
+  },
+  "nsis": {
+    "oneClick": false,
+    "allowToChangeInstallationDirectory": true
   }
 }

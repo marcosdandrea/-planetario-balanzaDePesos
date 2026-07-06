@@ -6,7 +6,8 @@ console.log('Building headless version...');
 
 build({
     entryPoints: {
-        main: 'src/app/main.ts'
+        main: 'src/app/main.ts',
+        'scale-serial-worker': 'scripts/scale-serial-worker.mjs'
     },
     outdir: 'dist/headless',
     entryNames: '[name]',

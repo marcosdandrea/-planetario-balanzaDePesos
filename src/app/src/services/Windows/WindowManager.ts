@@ -126,9 +126,6 @@ export class WindowManager {
                 });
 
                 window.once('ready-to-show', () => {
-                    // La posición (x, y) ya fue calculada al crear la ventana en
-                    // base a la pantalla objetivo, así que no hace falta
-                    // reposicionarla ni centrarla acá.
                     if (options.fullscreen) {
                         window.setFullScreen(true);
                     }

@@ -31,8 +31,10 @@ const init = async ({ io }: InitParams) => {
     }
 
     try {
-        // Calcular ruta al worker desde la raíz del proyecto
-        const workerPath = path.resolve(process.cwd(), 'scripts', 'scale-serial-worker.mjs');
+        // El worker se bundlea junto a main.js (ver scripts/build-electron.mjs y
+        // scripts/build-headless.mjs), así que vive siempre al lado del archivo
+        // compilado actual, tanto en desarrollo como empaquetado.
+        const workerPath = path.join(__dirname, 'scale-serial-worker.js');
         
         log.info(`Forking scale worker: ${workerPath}`);
         
@@ -57,7 +59,8 @@ const init = async ({ io }: InitParams) => {
                         requestCommand: env.SCALE_SERIAL_REQUEST_COMMAND,
                         minDelta: env.SCALE_SERIAL_MIN_DELTA,
                         wackWaitMs: env.SCALE_SERIAL_WACK_WAIT_MS,
-                        idleWackWaitMs: env.SCALE_SERIAL_IDLE_WACK_WAIT_MS
+                        idleWackWaitMs: env.SCALE_SERIAL_IDLE_WACK_WAIT_MS,
+                        debouncingTimeMs: env.SCALE_DEBOUNCING_TIME_MS
                     }
                 });
             } else if (message.type === 'status') {

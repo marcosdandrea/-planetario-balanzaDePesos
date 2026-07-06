@@ -6,6 +6,7 @@ import style from './stye.module.css';
 import { GameContext } from '@contexts/game';
 import Scale from '../Scale';
 import ScaleTester from '@components/ScaleTester';
+import useIpc from '@hooks/useIpc';
 
 // Componentes separados y memoizados para evitar re-renders cruzados
 const ScaleArea = memo(() => <Scale />);
@@ -24,6 +25,7 @@ StaticElements.displayName = 'StaticElements';
 const Game = memo(() => {
     const {sprites} = useContext(GameContext);
     const [allSpritesLoaded, setAllSpritesLoaded] = useState(false);
+    const { useUiTester } = useIpc();
 
     useEffect(() => {
         if (sprites) {
@@ -39,7 +41,7 @@ const Game = memo(() => {
             <ScaleArea />
             <PlanetArea />
             <StaticElements />
-            {/* <ScaleTester /> */}
+            {useUiTester && <ScaleTester />}
         </div>
     );
 });

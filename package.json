@@ -1,7 +1,7 @@
 {
   "name": "balanzadepesos",
   "private": true,
-  "version": "1.0.12",
+  "version": "1.0.21",
   "main": "dist-electron/main.js",
   "author": "Proyecciones Digitales",
   "description": "",
@@ -27,7 +27,7 @@
     "transpile:headless": "npm run clean:headless && npm run build:headless",
     "increment:version": "node scripts/increment-version.mjs",
     "dist:mac": "npm run increment:version && npm run clean:dist && npm run transpile:electron && npm run build:vite && electron-builder --mac --arm64",
-    "dist:win": "npm run increment:version && npm run clean:dist && npm run transpile:electron && npm run build:vite && node scripts/prepare-native-modules.mjs && bash scripts/build-windows.sh",
+    "dist:win": "npm run increment:version && npm run clean:dist && npm run transpile:electron && npm run build:vite && node scripts/prepare-native-modules.mjs && cross-env npm_config_build_from_source=false electron-builder --win --x64 --publish never",
     "dist:linux": "npm run increment:version && npm run clean:dist && npm run transpile:electron && npm run build:vite && electron-builder --linux --x64",
     "dist:headless": "npm run increment:version && npm run clean:dist && npm run build:vite && cross-env NODE_ENV=production HEADLESS=true node build-headless.mjs && xcopy dist-ui dist\\headless\\dist-ui /E /I /Y",
     "test:unit": "vitest src"

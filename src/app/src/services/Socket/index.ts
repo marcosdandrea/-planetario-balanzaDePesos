@@ -31,8 +31,14 @@ const init = async ({ httpServer, cors }: { httpServer: Server, cors?: any }) =>
                 else 
                     log.info('Socket isolation enabled - only localhost connections allowed');
 
+                const mainServerPort = env.MAIN_SERVER_PORT;
                 corsConfig = {
-                    origin: ["http://localhost:3000", "http://127.0.0.1:3000", "http://localhost:5123", "http://127.0.0.1:5123"],
+                    origin: [
+                        `http://localhost:${mainServerPort}`,
+                        `http://127.0.0.1:${mainServerPort}`,
+                        "http://localhost:5123",
+                        "http://127.0.0.1:5123"
+                    ],
                     methods: ["GET", "POST"],
                     ...(cors || {})
                 };

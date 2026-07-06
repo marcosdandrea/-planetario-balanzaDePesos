@@ -16,8 +16,18 @@ export const getContextIsolationStatus = (event: Electron.IpcMainInvokeEvent, ar
     return Promise.resolve(useContextIsolation);
 }
 
+export const getUiTesterStatus = (event: Electron.IpcMainInvokeEvent, arg: any[]): Promise<boolean> => {
+    return Promise.resolve(env.USE_UI_TESTER);
+}
+
+export const getServerPort = (event: Electron.IpcMainInvokeEvent, arg: any[]): Promise<number> => {
+    return Promise.resolve(env.MAIN_SERVER_PORT);
+}
+
 export default {
     getSystemTime,
     getAuthToken,
-    getContextIsolationStatus
+    getContextIsolationStatus,
+    getUiTesterStatus,
+    getServerPort
 }

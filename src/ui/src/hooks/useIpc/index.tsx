@@ -6,7 +6,7 @@ const useIpc = () => {
     if (!ipcContext) {
         throw new Error("ipcContext is not defined");
     }
-    const {ipc, authToken, contextIsolation} = useContext(ipcContext) as {ipc: ElectronAPI | null, authToken: string | null, contextIsolation: boolean | null};
+    const {ipc, authToken, contextIsolation, useUiTester, serverPort} = useContext(ipcContext) as {ipc: ElectronAPI | null, authToken: string | null, contextIsolation: boolean | null, useUiTester: boolean, serverPort: number | null};
 
     if (!ipc) {
         throw new Error("useIpc must be used within an IpcContextProvider");
@@ -15,6 +15,8 @@ const useIpc = () => {
     return {
         authToken,
         contextIsolation,
+        useUiTester,
+        serverPort,
         send: ipc.send,
         on: ipc.on,
         once: ipc.once,

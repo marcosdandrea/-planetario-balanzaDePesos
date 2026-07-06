@@ -81,6 +81,7 @@ const init = async (config) => {
         let lastEmittedWeight = null;
         let wackWaitMs = Number(config.wackWaitMs ?? DEFAULT_WACK_WAIT_MS);
         let idleWackWaitMs = Number(config.idleWackWaitMs ?? DEFAULT_IDLE_WACK_WAIT_MS);
+        let debouncingTimeMs = Number(config.debouncingTimeMs ?? 0);
 
         if (!Number.isFinite(wackWaitMs) || wackWaitMs < 0) {
             wackWaitMs = DEFAULT_WACK_WAIT_MS;
@@ -89,6 +90,45 @@ const init = async (config) => {
         if (!Number.isFinite(idleWackWaitMs) || idleWackWaitMs < 0) {
             idleWackWaitMs = DEFAULT_IDLE_WACK_WAIT_MS;
         }
+
+        if (!Number.isFinite(debouncingTimeMs) || debouncingTimeMs < 0) {
+            debouncingTimeMs = 0;
+        }
+
+        // Debounce: mientras el peso sigue cambiando (ej. objeto asentándose en la
+        // balanza), se pospone el envío al proceso principal. Solo se emite el
+        // último valor recibido una vez que pasan `debouncingTimeMs` sin cambios.
+        let debounceTimerId = null;
+        let pendingEmit = null;
+
+        const clearDebounceTimer = () => {
+            if (debounceTimerId) {
+                clearTimeout(debounceTimerId);
+                debounceTimerId = null;
+            }
+        };
+
+        const sendWeight = (payload) => {
+            process.send({ type: 'weight', ...payload });
+            console.log(`[scale-worker] Weight: ${payload.weight.toFixed(3)} kg`);
+        };
+
+        const scheduleWeightEmit = (payload) => {
+            if (debouncingTimeMs <= 0) {
+                sendWeight(payload);
+                return;
+            }
+
+            pendingEmit = payload;
+            clearDebounceTimer();
+            debounceTimerId = setTimeout(() => {
+                debounceTimerId = null;
+                if (pendingEmit) {
+                    sendWeight(pendingEmit);
+                    pendingEmit = null;
+                }
+            }, debouncingTimeMs);
+        };
 
         const clearWackTimer = () => {
             if (wackTimerId) {
@@ -216,13 +256,7 @@ const init = async (config) => {
 
                 if (lastEmittedWeight === null || weight !== lastEmittedWeight || returnedFromWack) {
                     lastEmittedWeight = weight;
-                    process.send({
-                        type: 'weight',
-                        weight,
-                        raw: weightStr,
-                        timestamp: now
-                    });
-                    console.log(`[scale-worker] Weight: ${weight.toFixed(3)} kg`);
+                    scheduleWeightEmit({ weight, raw: weightStr, timestamp: now });
                 }
 
                 pending = pending.slice(etxIdx + 2);
@@ -261,7 +295,8 @@ const init = async (config) => {
 
         process.on('exit', () => {
             if (pollIntervalId) clearInterval(pollIntervalId);
-            clearWaitTimer();
+            clearWackTimer();
+            clearDebounceTimer();
             if (port.isOpen) port.close(() => {});
         });
     } catch (error) {

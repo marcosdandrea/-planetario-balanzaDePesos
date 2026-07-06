@@ -23,10 +23,13 @@ dotenv.config({ path: envPath });
 const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'production']).default('production'),
   USE_AUTHENTICATION: z.string().transform(val => val === 'true').pipe(z.boolean()).default(false),
+  USE_UI_TESTER: z.string().transform(val => val === 'true').pipe(z.boolean()).default(false),
   LOCALHOST_ONLY: z.string().transform(val => val === 'true').pipe(z.boolean()).default(true),
   USE_CONTEXT_ISOLATION: z.string().transform(val => val === 'true').pipe(z.boolean()).default(false),
   PUBLIC_ENDPOINTS: z.string().optional(),
-  MAIN_SERVER_PORT: z.string().transform(val => parseInt(val, 10)).pipe(z.number()).default(3000),
+  // 3000 es un puerto muy usado por otras apps de desarrollo (React, Grafana, etc.),
+  // por eso el default queda en un puerto poco común.
+  MAIN_SERVER_PORT: z.string().transform(val => parseInt(val, 10)).pipe(z.number()).default(50123),
   SCALE_SERIAL_ENABLED: z.string().transform(val => val === 'true').pipe(z.boolean()).default(true),
   SCALE_SERIAL_PORT: z.string().default('auto'),
   SCALE_SERIAL_BAUD_RATE: z.string().transform(val => parseInt(val, 10)).pipe(z.number()).default(9600),
@@ -42,6 +45,7 @@ const envSchema = z.object({
   SCALE_SERIAL_REQUEST_COMMAND: z.string().optional(),
   SCALE_SERIAL_POLL_INTERVAL_MS: z.string().transform(val => parseInt(val, 10)).pipe(z.number()).default(0),
   SCALE_SERIAL_MIN_DELTA: z.string().transform(val => parseFloat(val)).pipe(z.number()).default(0.5),
+  SCALE_DEBOUNCING_TIME_MS: z.string().transform(val => parseInt(val, 10)).pipe(z.number()).default(0),
   SCALE_SERIAL_WACK_WAIT_MS: z.string().transform(val => parseInt(val, 10)).pipe(z.number()).default(5000),
   SCALE_SERIAL_IDLE_WACK_WAIT_MS: z.string().transform(val => parseInt(val, 10)).pipe(z.number()).default(1000),
   WRITE_LOGS_TO_FILE: z.string().transform(val => val === 'true').pipe(z.boolean()).default(false),

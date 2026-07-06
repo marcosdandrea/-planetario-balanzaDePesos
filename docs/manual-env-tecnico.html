@@ -140,6 +140,13 @@
       <div class="warning">
         <strong>No cambiar por prueba y error:</strong> si no se conoce el efecto de una variable, modificar un solo valor por vez y anotar el cambio realizado.
       </div>
+      <div class="note">
+        <strong>Donde esta el archivo segun la instalacion:</strong>
+        <ul>
+          <li><strong>Aplicacion instalada (uso normal en el museo):</strong> el <code>.env</code> esta en la carpeta <code>resources</code>, al lado del ejecutable (por ejemplo <code>...\Balanza de Pesos\resources\.env</code>). Se edita directamente con el Bloc de notas; no esta empaquetado ni comprimido dentro de la aplicacion.</li>
+          <li><strong>Entorno de desarrollo:</strong> el <code>.env</code> esta en la raiz del proyecto.</li>
+        </ul>
+      </div>
     </section>
 
     <section>
@@ -199,6 +206,11 @@
             <td><code>0.5</code> kg</td>
           </tr>
           <tr>
+            <td><code>SCALE_DEBOUNCING_TIME_MS</code></td>
+            <td>Tiempo (en milisegundos) que la app espera despues de detectar un cambio de peso antes de mostrarlo en pantalla, para evitar que el numero "salte" mientras el objeto todavia se esta asentando en la balanza. Si llega un nuevo cambio antes de que se cumpla ese tiempo, la espera se reinicia y solo se muestra el ultimo valor ya estable.</td>
+            <td><code>1000</code> ms (<code>0</code> = desactivado, muestra cada cambio al instante)</td>
+          </tr>
+          <tr>
             <td><code>SCALE_SERIAL_WACK_WAIT_MS</code></td>
             <td>Tiempo maximo de WACK continuo para mostrar <em>Espere...</em> cuando ya hay peso activo.</td>
             <td><code>5000</code> ms</td>
@@ -212,9 +224,51 @@
       </table>
     </section>
 
+    <section>
+      <h2>3. Puerto del servidor y modo de prueba</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Variable</th>
+            <th>Para que sirve</th>
+            <th>Valor actual recomendado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>MAIN_SERVER_PORT</code></td>
+            <td>Puerto de red interno que usa la aplicacion para comunicar la pantalla del juego con el servidor. No hace falta tocarlo salvo que otro programa de la computadora este usando el mismo puerto.</td>
+            <td><code>50123</code></td>
+          </tr>
+          <tr>
+            <td><code>USE_UI_TESTER</code></td>
+            <td>Muestra un panel flotante de prueba sobre la pantalla del juego para simular manualmente un peso, sin necesidad de tener la balanza conectada. Es una herramienta de diagnostico tecnico, no para el publico.</td>
+            <td><code>false</code></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="warning">
+        <strong>Importante:</strong> si se cambia <code>MAIN_SERVER_PORT</code>, no hace falta editar ningun otro archivo: tanto la ventana de la aplicacion como su conexion interna se ajustan solas al nuevo puerto. Evitar solamente numeros muy comunes (como <code>3000</code>, <code>80</code> u <code>8080</code>), que suelen estar ocupados por otros programas.
+      </div>
+      <div class="warning">
+        <strong>Importante:</strong> con <code>USE_UI_TESTER=true</code> aparece, sobre la pantalla del juego, un panel visible con un campo para "setear" un peso manualmente. Se recomienda dejarlo en <code>false</code> durante la exhibicion normal y activarlo solo para pruebas puntuales.
+      </div>
+    </section>
+
+    <section>
+      <h2>4. Elegir en que pantalla abre la aplicacion</h2>
+      <p>Esto no se configura en el <code>.env</code>, sino como parametro al iniciar el ejecutable. Sirve para instalaciones con mas de una pantalla conectada (por ejemplo, una pantalla de exhibicion y un monitor de control aparte).</p>
+      <div class="note">
+        Para abrir la aplicacion en la pantalla numero 2, hay que agregar <code>--screen=2</code> al iniciar el ejecutable (la pantalla 1 es la primera que detecta Windows). Desde un acceso directo: abrir Propiedades, e ir al campo "Destino", agregando <code>--screen=2</code> despues de las comillas de cierre del ejecutable.
+      </div>
+      <div class="warning">
+        <strong>Si el numero de pantalla no es valido</strong> (por ejemplo se pide la pantalla 3 pero solo hay 2 conectadas), la aplicacion abre automaticamente en la primera pantalla, sin mostrar ningun error.
+      </div>
+    </section>
+
     <section class="grid">
       <div class="card">
-        <h2>3. Que hacer si la balanza responde lento</h2>
+        <h2>5. Que hacer si la balanza responde lento</h2>
         <ol>
           <li>Revisar primero el cableado y el puerto USB/serial.</li>
           <li>Confirmar que <code>SCALE_SERIAL_PORT</code> siga en <code>auto</code> o en el puerto correcto.</li>
@@ -223,7 +277,7 @@
         </ol>
       </div>
       <div class="card">
-        <h2>4. Reglas de espera</h2>
+        <h2>6. Reglas de espera</h2>
         <ul>
           <li>Con la balanza en <code>0 kg</code>, la app espera <code>1 segundo</code> de WACK continuo antes de mostrar <em>Espere...</em>.</li>
           <li>Con peso mayor a <code>0.5 kg</code>, la app espera <code>5 segundos</code> de WACK continuo antes de mostrar <em>Espere...</em>.</li>
@@ -233,19 +287,21 @@
     </section>
 
     <section class="page-break">
-      <h2>5. Procedimiento seguro para cambiar el .env</h2>
+      <h2>7. Procedimiento seguro para cambiar el .env</h2>
       <ol>
         <li>Cerrar la aplicacion si esta abierta.</li>
-        <li>Abrir el archivo <code>.env</code> desde la raiz del proyecto.</li>
+        <li>Abrir el archivo <code>.env</code> (ver seccion 1 para la ubicacion segun el tipo de instalacion).</li>
         <li>Modificar solo la variable necesaria.</li>
         <li>Guardar el archivo.</li>
         <li>Reiniciar la aplicacion completa.</li>
         <li>Probar la balanza y observar el resultado durante unos segundos.</li>
       </ol>
 
-      <h2>6. Valores de referencia rapidos</h2>
+      <h2>8. Valores de referencia rapidos</h2>
       <ul>
         <li><strong>Lectura demasiado inestable:</strong> subir <code>SCALE_SERIAL_MIN_DELTA</code>.</li>
+        <li><strong>La lectura "tiembla" o cambia varias veces antes de asentarse:</strong> subir <code>SCALE_DEBOUNCING_TIME_MS</code> (por ejemplo de <code>1000</code> a <code>1500</code> ms).</li>
+        <li><strong>El peso tarda demasiado en aparecer en pantalla:</strong> bajar <code>SCALE_DEBOUNCING_TIME_MS</code>, con cuidado, ya que valores muy bajos pueden volver a mostrar saltos.</li>
         <li><strong>La app tarda en reaccionar:</strong> revisar <code>SCALE_SERIAL_POLL_INTERVAL_MS</code> y la conexion fisica.</li>
         <li><strong>Muestra <em>Espere...</em> muy pronto en 0 kg:</strong> subir <code>SCALE_SERIAL_IDLE_WACK_WAIT_MS</code>.</li>
         <li><strong>Muestra <em>Espere...</em> demasiado tarde con peso:</strong> bajar <code>SCALE_SERIAL_WACK_WAIT_MS</code> con cuidado.</li>
@@ -257,7 +313,7 @@
     </section>
 
     <section>
-      <h2>7. Soporte</h2>
+      <h2>9. Soporte</h2>
       <p>Si la balanza deja de responder, anotar el valor cambiado, la hora y el comportamiento observado antes de tocar otra variable. Eso facilita el diagnostico tecnico.</p>
     </section>
 

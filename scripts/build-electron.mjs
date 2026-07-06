@@ -3,7 +3,8 @@ import { build } from 'esbuild';
 build({
     entryPoints: {
         main: 'src/app/main.ts',
-        preload: 'scripts/preload.ts'
+        preload: 'scripts/preload.ts',
+        'scale-serial-worker': 'scripts/scale-serial-worker.mjs'
     },
     outdir: 'dist-electron',
     entryNames: '[name]',

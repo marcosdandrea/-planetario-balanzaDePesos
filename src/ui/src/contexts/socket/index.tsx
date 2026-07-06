@@ -14,16 +14,18 @@ interface SocketContextProviderProps {
 }
 
 export const SocketContext = createContext<SocketContextType | null>(null);
-const url = 'http://localhost:3000';
 
 export const SocketContextProvider: React.FC<SocketContextProviderProps> = ({ children }) => {
     const [socket, setSocket] = useState<Socket | null>(null);
     const [isConnected, setIsConnected] = useState(false);
     const location = useLocation()
-    const { authToken, contextIsolation } = useIpc() as { authToken: string, contextIsolation: boolean };
+    const { authToken, contextIsolation, serverPort } = useIpc() as { authToken: string, contextIsolation: boolean, serverPort: number };
 
     useEffect(() => {
+        if (!serverPort) return;
+
         // Crear la conexión del socket
+        const url = `http://localhost:${serverPort}`;
         const newSocket = io(url, {
             transports: ['websocket', 'polling'],
             timeout: 5000,
@@ -33,11 +35,9 @@ export const SocketContextProvider: React.FC<SocketContextProviderProps> = ({ ch
         setSocket(newSocket);
 
         return () => {
-            if (newSocket) {
-                newSocket.disconnect();
-            }
+            newSocket.disconnect();
         };
-    }, []);
+    }, [serverPort]);
 
 
     useEffect(() => {
@@ -45,7 +45,7 @@ export const SocketContextProvider: React.FC<SocketContextProviderProps> = ({ ch
 
         const handleConnect = () => {
             setIsConnected(true);
-            console.log(`Socket connected to: ${url}`);
+            console.log(`Socket connected to: http://localhost:${serverPort}`);
         };
 
         const handleDisconnect = (reason: string) => {
